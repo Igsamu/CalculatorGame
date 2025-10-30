@@ -118,6 +118,9 @@ function calculate() {
             if (questionIndex < questions.length) {
                 questionEl.textContent = questions[questionIndex].text;
                 feedbackEl.textContent = "¡Correcto!";
+                setTimeout(() => {
+                    feedbackEl.textContent = '';
+                }, 3000);
                 updateOperations(); // actualizar operaciones permitidas
             } else {
                 questionEl.textContent = "¡Juego terminado!";
@@ -135,4 +138,3 @@ function calculate() {
 // Iniciar juego
 questionEl.textContent = questions[questionIndex].text;
 updateOperations();
-
