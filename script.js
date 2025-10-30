@@ -20,8 +20,8 @@ const questions = [
     { text: "Número de planetas en el sistema solar", answer: 8, op: ["-", "*"] },   // 10 - 2 --- 10 * 0.8 = 8
     { text: "Días que tiene un año bisiesto", answer: 366, op: ["+", "*"] },         // 8 * 45.75 = 366 ---- 8 + 358 = 366
     { text: "Población aproximada de España en millones", answer: 47, op: ["-", "*"] }, // 366 - 319 = 47 --- 366 * 0.128 = 47
-    { text: "Altura del Monte Everest en metros", answer: 8848, op: ["*", "+"] },     // 47 * 188.25 = 8848 --- 8000 + 848 = 8848
-    { text: "Número de estados en Estados Unidos", answer: 50, op: ["-", "*"] },       // 8848 - 8798 = 50 --- 8848 * 0.0056 = 50
+    { text: "Altura del Monte Everest en metros", answer: 8849, op: ["*", "+"] },     // 47 * 188.27 = 8849 --- 47 + 8802 = 8849
+    { text: "Número de estados en Estados Unidos", answer: 50, op: ["-", "*"] },       // 8849 - 8799 = 50 --- 8849 * 0.0057 = 50
     { text: "Número de minutos en 3 horas", answer: 180, op: ["*", "+"] },            // 50 * 3.6 = 180 --- 50 + 130 = 180
     { text: "Año en que Cristóbal Colón llegó a América", answer: 1492, op: ["+", "/"] }, // 180 / 0.12065 = 1492 --- 180 + 1312 = 1492
     { text: "Número de elementos químicos en la tabla periódica", answer: 118, op: ["-", "*"] }, // 1492 - 1374 = 118 --- 1492 * 0.079 = 118
