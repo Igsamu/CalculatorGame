@@ -1,0 +1,103 @@
+/* Fondo general */
+body {
+    font-family: 'Courier New', Courier, monospace;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 50px;
+    background-color: #1a2a40;
+    color: #fff;
+}
+
+/* Calculadora */
+.calculator {
+    background-color: #222c3b;
+    padding: 15px;
+    border-radius: 10px;
+    width: 320px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+}
+
+#display {
+    width: 300px;
+    height: 80px;
+    background-color: #1e2b3a;
+    border-radius: 5px;
+    padding: 5px 10px;
+    margin-bottom: 5px;
+    color: #00ff99;
+    font-weight: bold;
+    box-shadow: inset 0 0 5px #00ff99;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+}
+
+#prevAns, #currentInput {
+    font-size: 1.8em;
+    text-align: right;
+}
+
+/* Botones */
+.buttons {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-gap: 10px;
+}
+
+button {
+    height: 55px;
+    font-size: 1.4em;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    background-color: #3a4a5a;
+    color: #fff;
+    transition: 0.1s;
+    box-shadow: 0 3px #1f2a38;
+}
+
+button:hover {
+    background-color: #5a6b80;
+}
+
+/* Efecto pulsado al presionar */
+button:active {
+    transform: translateY(3px);
+    box-shadow: 0 0 #1f2a38;
+}
+
+/* Botón C y = */
+.clear {
+    background-color: #ff4444;
+    font-size: 1.2em;
+}
+
+.equals {
+    background-color: #44ff44;
+    font-size: 1.6em;
+    grid-column: span 4;
+}
+
+/* Bloque de preguntas */
+.game {
+    margin-top: 30px;
+    text-align: center;
+    background-color: #2a3b50;
+    padding: 20px;
+    border-radius: 10px;
+    width: 300px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.4);
+}
+
+#question {
+    font-size: 1.3em;
+    margin-bottom: 15px;
+    color: #ffd700;
+}
+
+#feedback {
+    margin-top: 10px;
+    font-size: 1.1em;
+    color: #ffddaa;
+}

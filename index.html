@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora Juego</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+    <div class="calculator">
+        <!-- Pantalla de la calculadora -->
+        <div id="display">
+            <div id="prevAns"></div>
+            <div id="currentInput"></div>
+        </div>
+
+        <div class="buttons">
+            <button onclick="appendNumber('7')">7</button>
+            <button onclick="appendNumber('8')">8</button>
+            <button onclick="appendNumber('9')">9</button>
+            <button id="btn/" onclick="appendOperator('/')">/</button>
+
+            <button onclick="appendNumber('4')">4</button>
+            <button onclick="appendNumber('5')">5</button>
+            <button onclick="appendNumber('6')">6</button>
+            <button id="btn*" onclick="appendOperator('*')">*</button>
+
+            <button onclick="appendNumber('1')">1</button>
+            <button onclick="appendNumber('2')">2</button>
+            <button onclick="appendNumber('3')">3</button>
+            <button id="btn-" onclick="appendOperator('-')">-</button>
+
+            <button onclick="appendNumber('0')">0</button>
+            <button onclick="appendNumber('.')">.</button>
+            <button onclick="clearDisplay()" class="clear">C</button>
+            <button id="btn+" onclick="appendOperator('+')">+</button>
+            
+            <button onclick="calculate()" class="equals">=</button>
+        </div>
+    </div>
+
+
+
+    <div class="game">
+        <h2 id="question">Pregunta aparecerá aquí</h2>
+        <p id="feedback"></p>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+
+</html>
