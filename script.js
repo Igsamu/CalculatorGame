@@ -11,7 +11,7 @@ let questionIndex = 0;
 
 // Preguntas con operación permitida
 const questions = [
-    // 3 preguntas tutorial
+    // Preguntas tutorial
     { text: "Consigue un 3", answer: 3, op: ["+"] },                   // 0 + 3 = 3
     { text: "Suma 2 al resultado anterior", answer: 5, op: ["+"] },    // 3 + 2 = 5
     { text: "Multiplica por 2 el resultado anterior", answer: 10, op: ["*"] }, // 5 * 2 = 10
@@ -31,7 +31,7 @@ const questions = [
     { text: "Número de países en la Unión Europea", answer: 27, op: ["-", "*"] },     // 33 - 6 = 27 --- 33 * 0.818 = 27
     { text: "Suma de los ángulos de un hexágono regular", answer: 240, op: ["+", "*"] }, // 27 + 213 = 240 --- 27 * 8.888 = 240
 
-    // Preguntas más difíciles (una sola operación)
+    // Preguntas más difíciles
     { text: "Número de minutos en un día", answer: 1440, op: ["*"] },                  // 240 * 6, = 1440
     { text: "Año en que se fundó la ONU", answer: 1945, op: ["+"] },                  // 1440 + 505 = 1945
     { text: "Número de segundos en una hora", answer: 3600, op: ["/"] },              // 1945 / 0.5403 = 3600
@@ -43,12 +43,10 @@ const questions = [
 
 // Función para calcular input de manera segura
 function calculateInput(input) {
-    // Si empieza con operador, añadimos ans automáticamente
     if (/^[\+\-\*\/]/.test(input)) {
         input = ans + input;
     }
 
-    // Reemplazo de funciones matemáticas si quieres más adelante
     let safeInput = input
         .replace(/ans/g, ans)
         .replace(/sqrt/g, 'Math.sqrt')
@@ -76,7 +74,7 @@ function clearDisplay() {
     currentInputEl.textContent = '';
 }
 
-// Función para actualizar operaciones permitidas
+// Actualizar operaciones permitidas
 function updateOperations() {
     const operations = ["+", "-", "*", "/"];
     const currentOp = questions[questionIndex].op; // ahora un array
@@ -95,11 +93,10 @@ function updateOperations() {
     });
 }
 
-
-// Función principal de calcular
+// Función principal
 function calculate() {
     try {
-        let userAns = calculateInput(currentInput); // cálculo seguro
+        let userAns = calculateInput(currentInput);
 
         // Redondeo si la operación contiene * o /
         if (currentInput.includes("*") || currentInput.includes("/")) {
@@ -109,7 +106,7 @@ function calculate() {
         let correctAns = questions[questionIndex].answer;
 
         if (Number(userAns) === Number(correctAns)) {
-            ans = userAns; // actualizar respuesta anterior
+            ans = userAns;
             prevAnsEl.textContent = ans;
             currentInput = '';
             currentInputEl.textContent = '';
@@ -121,7 +118,7 @@ function calculate() {
                 setTimeout(() => {
                     feedbackEl.textContent = '';
                 }, 3000);
-                updateOperations(); // actualizar operaciones permitidas
+                updateOperations();
             } else {
                 questionEl.textContent = "¡Juego terminado!";
                 feedbackEl.textContent = '';
