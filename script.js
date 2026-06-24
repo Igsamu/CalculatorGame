@@ -1,137 +1,258 @@
-// Elementos del display
-let prevAnsEl = document.getElementById('prevAns');
-let currentInputEl = document.getElementById('currentInput');
-let questionEl = document.getElementById('question');
-let feedbackEl = document.getElementById('feedback');
-
-// Variables
-let currentInput = '';
-let ans = 0;
-let questionIndex = 0;
-
-// Preguntas con operación permitida
-const questions = [
-    // Preguntas tutorial
-    { text: "Consigue un 3", answer: 3, op: ["+"] },                   // 0 + 3 = 3
-    { text: "Suma 2 al resultado anterior", answer: 5, op: ["+"] },    // 3 + 2 = 5
-    { text: "Multiplica por 2 el resultado anterior", answer: 10, op: ["*"] }, // 5 * 2 = 10
-
-    // Preguntas de cultura general (fáciles/medias)
-    { text: "Número de planetas en el sistema solar", answer: 8, op: ["-", "*"] },   // 10 - 2 --- 10 * 0.8 = 8
-    { text: "Días que tiene un año bisiesto", answer: 366, op: ["+", "*"] },         // 8 * 45.75 = 366 ---- 8 + 358 = 366
-    { text: "Población aproximada de España en millones", answer: 47, op: ["-", "*"] }, // 366 - 319 = 47 --- 366 * 0.128 = 47
-    { text: "Altura del Monte Everest en metros", answer: 8849, op: ["*", "+"] },     // 47 * 188.27 = 8849 --- 47 + 8802 = 8849
-    { text: "Número de estados en Estados Unidos", answer: 50, op: ["-", "*"] },       // 8849 - 8799 = 50 --- 8849 * 0.0057 = 50
-    { text: "Número de minutos en 3 horas", answer: 180, op: ["*", "+"] },            // 50 * 3.6 = 180 --- 50 + 130 = 180
-    { text: "Año en que Cristóbal Colón llegó a América", answer: 1492, op: ["+", "/"] }, // 180 / 0.12065 = 1492 --- 180 + 1312 = 1492
-    { text: "Número de elementos químicos en la tabla periódica", answer: 118, op: ["-", "*"] }, // 1492 - 1374 = 118 --- 1492 * 0.079 = 118
-    { text: "Cantidad de jugadores en un equipo de fútbol", answer: 11, op: ["-", "*"] }, // 118 - 107 = 11 --- 118 * 0.0932 = 11
-    { text: "Año de inicio de la Segunda Guerra Mundial", answer: 1939, op: ["+", "*"] }, // 11 * 176.27 = 1939 --- 11 + 1928 = 1939
-    { text: "Número de vértebras en la columna humana", answer: 33, op: ["-", "*"] }, // 1939 - 1906 = 33 --- 1939 * 0.017 = 33
-    { text: "Número de países en la Unión Europea", answer: 27, op: ["-", "*"] },     // 33 - 6 = 27 --- 33 * 0.818 = 27
-    { text: "Suma de los ángulos de un hexágono regular", answer: 240, op: ["+", "*"] }, // 27 + 213 = 240 --- 27 * 8.888 = 240
-
-    // Preguntas más difíciles
-    { text: "Número de minutos en un día", answer: 1440, op: ["*"] },                  // 240 * 6, = 1440
-    { text: "Año en que se fundó la ONU", answer: 1945, op: ["+"] },                  // 1440 + 505 = 1945
-    { text: "Número de segundos en una hora", answer: 3600, op: ["/"] },              // 1945 / 0.5403 = 3600
-    { text: "Número de jugadores en un equipo de baloncesto", answer: 5, op: ["/"] }, // 3600 / 720 = 5
-    { text: "Número de vértebras cervicales en el humano", answer: 7, op: ["*"] }     // 5 * 1.4 = 7
+const TUTORIAL = [
+  { text: "Consigue un 3", answer: 3, op: ["+"] },
+  { text: "Suma 2 al resultado anterior", answer: 5, op: ["+"] },
+  { text: "Multiplica el resultado por 2", answer: 10, op: ["*"] }
 ];
 
+const EASY = [
+  { text: "Planetas en el sistema solar", answer: 8, op: ["-", "*"] },
+  { text: "Jugadores en un equipo de fútbol", answer: 11, op: ["-", "*"] },
+  { text: "Meses en un año", answer: 12, op: ["+", "*"] },
+  { text: "Horas en un día", answer: 24, op: ["+", "*"] },
+  { text: "Países en la Unión Europea (2024)", answer: 27, op: ["-", "*"] },
+  { text: "Días en un año bisiesto", answer: 366, op: ["+", "*"] },
+  { text: "Comunidades autónomas de España", answer: 17, op: ["-", "+"] },
+  { text: "Número de colores en el arcoíris", answer: 7, op: ["-", "*"] },
+  { text: "Semanas en un año", answer: 52, op: ["+", "*"] },
+  { text: "Teclas en un piano estándar", answer: 88, op: ["+", "*"] }
+];
 
+const MEDIUM = [
+  { text: "Elementos en la tabla periódica", answer: 118, op: ["-", "*"] },
+  { text: "Año en que Colón llegó a América", answer: 1492, op: ["+", "/"] },
+  { text: "Población de España en millones (aprox. 2024)", answer: 48, op: ["+", "*"] },
+  { text: "Año de inicio de la Segunda Guerra Mundial", answer: 1939, op: ["+", "*"] },
+  { text: "Minutos en 3 horas", answer: 180, op: ["*", "+"] },
+  { text: "Huesos en el cuerpo humano adulto", answer: 206, op: ["+", "*"] },
+  { text: "Año de fundación de la ONU", answer: 1945, op: ["+"] },
+  { text: "Suma de ángulos de un hexágono (grados)", answer: 720, op: ["*", "+"] },
+  { text: "Velocidad de la luz en millones de km/s (aprox)", answer: 300, op: ["*", "/"] },
+  { text: "Año en que España se unió a la UE", answer: 1986, op: ["+", "*"] }
+];
 
-// Función para calcular input de manera segura
-function calculateInput(input) {
-    if (/^[\+\-\*\/]/.test(input)) {
-        input = ans + input;
-    }
+const HARD = [
+  { text: "Altura del Monte Everest en metros", answer: 8849, op: ["*", "+"] },
+  { text: "Minutos en un día", answer: 1440, op: ["*"] },
+  { text: "Segundos en una hora", answer: 3600, op: ["/", "*"] },
+  { text: "Año en que cayó el Muro de Berlín", answer: 1989, op: ["+"] },
+  { text: "Distancia media Tierra-Luna en km (aprox)", answer: 384400, op: ["*"] },
+  { text: "Año en que se fundó Google", answer: 1998, op: ["+"] },
+  { text: "Número de vértebras en la columna humana", answer: 33, op: ["-", "*"] },
+  { text: "Año en que se aprobó la Constitución española", answer: 1978, op: ["+", "*"] },
+  { text: "Número de escaños en el Congreso de los Diputados", answer: 350, op: ["*", "+"] },
+  { text: "Número de vértebras cervicales en el humano", answer: 7, op: ["*"] }
+];
 
-    let safeInput = input
-        .replace(/ans/g, ans)
-        .replace(/sqrt/g, 'Math.sqrt')
-        .replace(/pow/g, 'Math.pow')
-        .replace(/sin/g, 'Math.sin')
-        .replace(/cos/g, 'Math.cos')
-        .replace(/tan/g, 'Math.tan');
+const MAX_GAME_QUESTIONS = 10;
+const MAX_LIVES = 3;
 
-    return Function(`"use strict"; return (${safeInput})`)();
+let currentInput = '';
+let ans = 0;
+let lives = MAX_LIVES;
+let isTutorial = true;
+let tutorialIdx = 0;
+let gameQueue = [];
+let gameIdx = 0;
+let currentQ = null;
+let skipTutorialOnRestart = false;
+
+// Elementos del DOM
+const prevAnsEl = document.getElementById('prevAns');
+const currentInputEl = document.getElementById('currentInput');
+const questionEl = document.getElementById('question');
+const feedbackEl = document.getElementById('feedback');
+const progressFill = document.getElementById('progress-fill');
+const qCounter = document.getElementById('q-counter');
+const phaseBadge = document.getElementById('phase-badge');
+const overlay = document.getElementById('overlay');
+
+function shuffle(arr) {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
 }
 
-// Funciones de la calculadora
+function buildGameQueue() {
+  const easy = shuffle(EASY).slice(0, 3);
+  const medium = shuffle(MEDIUM).slice(0, 4);
+  const hard = shuffle(HARD).slice(0, 3);
+  return [...easy, ...medium, ...hard];
+}
+
+function getPhase(q) {
+  if (EASY.includes(q)) return 'easy';
+  if (MEDIUM.includes(q)) return 'medium';
+  if (HARD.includes(q)) return 'hard';
+  return 'tutorial';
+}
+
+function setPhaseBadge(phase) {
+  const labels = { tutorial: 'Tutorial', easy: 'Fácil', medium: 'Medio', hard: 'Difícil' };
+  phaseBadge.textContent = labels[phase];
+  phaseBadge.className = 'phase-badge phase-' + phase;
+}
+
+function updateHearts() {
+  for (let i = 0; i < 3; i++) {
+    document.getElementById('h' + i).classList.toggle('lost', i >= lives);
+  }
+}
+
+function updateCounter() {
+  if (isTutorial) {
+    qCounter.textContent = `${tutorialIdx + 1}/3`;
+  } else {
+    qCounter.textContent = `${gameIdx + 1}/${MAX_GAME_QUESTIONS}`;
+  }
+}
+
+function updateProgress() {
+  let pct = 0;
+  if (isTutorial) {
+    pct = (tutorialIdx / 3) * 100;
+  } else {
+    pct = (gameIdx / MAX_GAME_QUESTIONS) * 100;
+  }
+  progressFill.style.width = pct + '%';
+}
+
+function loadQuestion(q) {
+  currentQ = q;
+  questionEl.textContent = q.text;
+  const phase = isTutorial ? 'tutorial' : getPhase(q);
+  setPhaseBadge(phase);
+  updateOperations(q.op);
+  updateCounter();
+  updateProgress();
+}
+
+function updateOperations(allowed) {
+  ['+', '-', '*', '/'].forEach(op => {
+    const btn = document.getElementById('btn' + op);
+    if (btn) {
+      btn.disabled = !allowed.includes(op);
+      btn.style.opacity = allowed.includes(op) ? 1 : 0.3;
+    }
+  });
+}
+
 function appendNumber(num) {
-    currentInput += num;
-    currentInputEl.textContent = currentInput;
+  currentInput += num;
+  currentInputEl.textContent = currentInput;
 }
 
 function appendOperator(op) {
-    currentInput += op;
-    currentInputEl.textContent = currentInput;
+  currentInput += op;
+  currentInputEl.textContent = currentInput;
 }
 
 function clearDisplay() {
+  currentInput = '';
+  currentInputEl.textContent = '';
+}
+
+function calculateInput(input) {
+  if (/^[\+\-\*\/]/.test(input)) input = ans + input;
+  const safe = input.replace(/ans/g, ans);
+  return Function('"use strict"; return (' + safe + ')')();
+}
+
+function setFeedback(msg, type) {
+  feedbackEl.textContent = msg;
+  feedbackEl.className = type === 'ok' ? 'feedback-ok' : (type === 'err' ? 'feedback-err' : '');
+}
+
+function showOverlay(icon, title, sub, btnLabel) {
+  document.getElementById('ov-icon').textContent = icon;
+  document.getElementById('ov-title').textContent = title;
+  document.getElementById('ov-sub').textContent = sub;
+  document.getElementById('ov-btn').textContent = btnLabel;
+  overlay.style.display = 'flex';
+}
+
+function restart() {
+  overlay.style.display = 'none';
+  lives = MAX_LIVES;
+  updateHearts();
+  ans = 0;
+  prevAnsEl.textContent = '';
+  currentInput = '';
+  currentInputEl.textContent = '';
+  setFeedback('', '');
+
+  if (skipTutorialOnRestart) {
+    isTutorial = false;
+    gameIdx = 0;
+    gameQueue = buildGameQueue();
+    loadQuestion(gameQueue[0]);
+  } else {
+    isTutorial = true;
+    tutorialIdx = 0;
+    loadQuestion(TUTORIAL[0]);
+  }
+  updateProgress();
+}
+
+function advance() {
+  if (isTutorial) {
+    tutorialIdx++;
+    if (tutorialIdx < TUTORIAL.length) {
+      loadQuestion(TUTORIAL[tutorialIdx]);
+    } else {
+      isTutorial = false;
+      gameIdx = 0;
+      gameQueue = buildGameQueue();
+      loadQuestion(gameQueue[gameIdx]);
+    }
+  } else {
+    gameIdx++;
+    updateProgress();
+    if (gameIdx >= MAX_GAME_QUESTIONS) {
+      showOverlay('🏆', '¡Has ganado!', `Respondiste ${MAX_GAME_QUESTIONS} preguntas correctamente. ¡Eres un crack!`, 'Jugar de nuevo');
+    } else {
+      loadQuestion(gameQueue[gameIdx]);
+    }
+  }
+}
+
+function calculate() {
+  if (!currentInput) return;
+  let userAns;
+  try {
+    userAns = calculateInput(currentInput);
+    if (currentInput.includes('*') || currentInput.includes('/')) {
+      userAns = Math.round(userAns);
+    }
+  } catch (e) {
+    currentInputEl.textContent = 'Error';
+    currentInput = '';
+    return;
+  }
+
+  if (Number(userAns) === Number(currentQ.answer)) {
+    ans = userAns;
+    prevAnsEl.textContent = ans;
     currentInput = '';
     currentInputEl.textContent = '';
-}
-
-// Actualizar operaciones permitidas
-function updateOperations() {
-    const operations = ["+", "-", "*", "/"];
-    const currentOp = questions[questionIndex].op; // ahora un array
-
-    operations.forEach(op => {
-        const btn = document.getElementById(`btn${op}`);
-        if (btn) {
-            if (currentOp.includes(op)) {
-                btn.disabled = false;
-                btn.style.opacity = 1;
-            } else {
-                btn.disabled = true;
-                btn.style.opacity = 0.3;
-            }
-        }
-    });
-}
-
-// Función principal
-function calculate() {
-    try {
-        let userAns = calculateInput(currentInput);
-
-        // Redondeo si la operación contiene * o /
-        if (currentInput.includes("*") || currentInput.includes("/")) {
-            userAns = Math.round(userAns);
-        }
-
-        let correctAns = questions[questionIndex].answer;
-
-        if (Number(userAns) === Number(correctAns)) {
-            ans = userAns;
-            prevAnsEl.textContent = ans;
-            currentInput = '';
-            currentInputEl.textContent = '';
-
-            questionIndex++;
-            if (questionIndex < questions.length) {
-                questionEl.textContent = questions[questionIndex].text;
-                feedbackEl.textContent = "¡Correcto!";
-                setTimeout(() => {
-                    feedbackEl.textContent = '';
-                }, 3000);
-                updateOperations();
-            } else {
-                questionEl.textContent = "¡Juego terminado!";
-                feedbackEl.textContent = '';
-            }
-        } else {
-            feedbackEl.textContent = `Incorrecto, intenta de nuevo.`;
-        }
-    } catch (e) {
-        currentInputEl.textContent = 'Error';
-        feedbackEl.textContent = '';
+    setFeedback('¡Correcto! ✓', 'ok');
+    setTimeout(() => { setFeedback('', ''); advance(); }, 900);
+  } else {
+    lives--;
+    updateHearts();
+    setFeedback('Incorrecto, intenta de nuevo.', 'err');
+    if (lives <= 0) {
+      setTimeout(() => {
+        skipTutorialOnRestart = true;
+        showOverlay('💀', 'Has perdido', '3 errores cometidos. ¡Inténtalo de nuevo!', 'Jugar de nuevo');
+      }, 600);
     }
+  }
 }
 
-// Iniciar juego
-questionEl.textContent = questions[questionIndex].text;
-updateOperations();
+// Iniciar
+loadQuestion(TUTORIAL[0]);
+updateHearts();
+updateCounter();
